@@ -62,9 +62,8 @@ class ShowDetailsPageState extends ConsumerState<ShowDetailsPage> {
                 Text('Age: ${customer.age}'),
                 Text('Date: ${customer.date.toLocal()}'),
                 // 画像のパスを表示（実際のアプリでは画像自体を表示する）
-                // for (var imageUrl in customer.images)
-                //   Image.network(imageUrl,
-                //       height: 100, width: 100), // 画像サイズは適宜調整してください
+                Image.network(customer.imageUrl,
+                    height: 100, width: 100), // 画像サイズは適宜調整してください
               ],
             ),
           );

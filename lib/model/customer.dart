@@ -9,7 +9,7 @@ class Customer with _$Customer {
     required String name,
     required int age,
     required DateTime date,
-    //required List<String> images,
+    required String imageUrl,
     Map<DateTime, List>? eventDates,
     Map<String, Customer>? eventDetails,
   }) = _Customer;

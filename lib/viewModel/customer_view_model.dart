@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:html' as html;
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../model/customer.dart';
@@ -11,14 +15,17 @@ final customerNotifierProvider =
 });
 
 class CustomerNotifier extends StateNotifier<Customer> {
-  CustomerNotifier() : super(Customer(name: '', age: 0, date: DateTime.now()));
+  CustomerNotifier()
+      : super(Customer(name: '', age: 0, date: DateTime.now(), imageUrl: ''));
 
   final CollectionReference customers =
       FirebaseFirestore.instance.collection('customers');
 
-  final ImagePicker _picker = ImagePicker();
+  // final ImagePicker _picker = ImagePicker();
 
   Map<String, Customer> eventDetails = {}; // IDとCustomerオブジェクトのマッピング
+
+  String? fileName; // 追加: ファイル名を保持する変数
 
   void setName(String name) {
     state = state.copyWith(name: name);
@@ -32,9 +39,9 @@ class CustomerNotifier extends StateNotifier<Customer> {
     state = state.copyWith(date: date);
   }
 
-  // void addImage(String image) {
-  //   state = state.copyWith(images: [...state.images, image]);
-  // }
+  void setImageUrl(String url) {
+    state = state.copyWith(imageUrl: url);
+  }
 
   Future<void> pickDate(BuildContext context) async {
     DateTime? date = await showDatePicker(
@@ -48,19 +55,22 @@ class CustomerNotifier extends StateNotifier<Customer> {
     }
   }
 
-  // Future<void> pickImage() async {
-  //   final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-  //   if (pickedFile != null) {
-  //     addImage(pickedFile.path);
-  //   }
-  // }
-  // Future<void> pickImage() async {
-  //   final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-  //   if (pickedFile != null) {
-  //     final String downloadURL = await uploadImageToFirebase(pickedFile.path);
-  //     addImage(downloadURL);
-  //   }
-  // }
+  void getImage() {
+    final input = html.FileUploadInputElement()..accept = 'image/*';
+    input.click();
+
+    input.onChange.listen((e) {
+      final file = input.files!.first;
+      fileName = file.name; // ファイル名を取得し、変数に保持
+      final reader = html.FileReader();
+
+      reader.onLoadEnd.listen((e) {
+        setImageUrl(reader.result as String); // Data URL
+      });
+
+      reader.readAsDataUrl(file);
+    });
+  }
 
   Future<void> saveCustomer() async {
     try {
@@ -68,11 +78,33 @@ class CustomerNotifier extends StateNotifier<Customer> {
         'name': state.name,
         'age': state.age,
         'date': state.date,
-        //'images': state.images,
+        'imageUrl': state.imageUrl,
       });
       debugPrint("Successfully Customer Added");
     } catch (e) {
       debugPrint("Failed to add customer: $e");
+    }
+  }
+
+  Future<void> saveImageToFirebaseStorage() async {
+    try {
+      final Reference storageRef = FirebaseStorage.instance
+          .ref()
+          .child(fileName ?? "default_name.jpg"); // 保持しているファイル名を使用
+
+      final String dataUrl = state.imageUrl;
+      final RegExp regex = RegExp(r'data:image/(.*);base64,');
+      final String base64String = dataUrl.replaceFirst(regex, '');
+      final Uint8List uint8ListData = base64Decode(base64String);
+
+      final UploadTask uploadTask = storageRef.putData(uint8ListData);
+
+      await uploadTask.whenComplete(() async {
+        final String downloadUrl = await storageRef.getDownloadURL();
+        debugPrint("Image uploaded, download URL: $downloadUrl");
+      });
+    } catch (e) {
+      debugPrint("Failed to upload image: $e");
     }
   }
 
@@ -89,7 +121,7 @@ class CustomerNotifier extends StateNotifier<Customer> {
             name: data['name'],
             age: data['age'],
             date: date,
-            //images: List<String>.from(data['images']),
+            imageUrl: data['imageUrl'].toString(),
           );
 
           debugPrint(

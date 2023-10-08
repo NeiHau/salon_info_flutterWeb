@@ -22,8 +22,8 @@ Customer _$CustomerFromJson(Map<String, dynamic> json) {
 mixin _$Customer {
   String get name => throw _privateConstructorUsedError;
   int get age => throw _privateConstructorUsedError;
-  DateTime get date =>
-      throw _privateConstructorUsedError; //required List<String> images,
+  DateTime get date => throw _privateConstructorUsedError;
+  String get imageUrl => throw _privateConstructorUsedError;
   Map<DateTime, List>? get eventDates => throw _privateConstructorUsedError;
   Map<String, Customer>? get eventDetails => throw _privateConstructorUsedError;
 
@@ -42,6 +42,7 @@ abstract class $CustomerCopyWith<$Res> {
       {String name,
       int age,
       DateTime date,
+      String imageUrl,
       Map<DateTime, List>? eventDates,
       Map<String, Customer>? eventDetails});
 }
@@ -62,6 +63,7 @@ class _$CustomerCopyWithImpl<$Res, $Val extends Customer>
     Object? name = null,
     Object? age = null,
     Object? date = null,
+    Object? imageUrl = null,
     Object? eventDates = freezed,
     Object? eventDetails = freezed,
   }) {
@@ -78,6 +80,10 @@ class _$CustomerCopyWithImpl<$Res, $Val extends Customer>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       eventDates: freezed == eventDates
           ? _value.eventDates
           : eventDates // ignore: cast_nullable_to_non_nullable
@@ -102,6 +108,7 @@ abstract class _$$CustomerImplCopyWith<$Res>
       {String name,
       int age,
       DateTime date,
+      String imageUrl,
       Map<DateTime, List>? eventDates,
       Map<String, Customer>? eventDetails});
 }
@@ -120,6 +127,7 @@ class __$$CustomerImplCopyWithImpl<$Res>
     Object? name = null,
     Object? age = null,
     Object? date = null,
+    Object? imageUrl = null,
     Object? eventDates = freezed,
     Object? eventDetails = freezed,
   }) {
@@ -136,6 +144,10 @@ class __$$CustomerImplCopyWithImpl<$Res>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       eventDates: freezed == eventDates
           ? _value._eventDates
           : eventDates // ignore: cast_nullable_to_non_nullable
@@ -155,6 +167,7 @@ class _$CustomerImpl implements _Customer {
       {required this.name,
       required this.age,
       required this.date,
+      required this.imageUrl,
       final Map<DateTime, List>? eventDates,
       final Map<String, Customer>? eventDetails})
       : _eventDates = eventDates,
@@ -169,9 +182,9 @@ class _$CustomerImpl implements _Customer {
   final int age;
   @override
   final DateTime date;
-//required List<String> images,
+  @override
+  final String imageUrl;
   final Map<DateTime, List>? _eventDates;
-//required List<String> images,
   @override
   Map<DateTime, List>? get eventDates {
     final value = _eventDates;
@@ -193,7 +206,7 @@ class _$CustomerImpl implements _Customer {
 
   @override
   String toString() {
-    return 'Customer(name: $name, age: $age, date: $date, eventDates: $eventDates, eventDetails: $eventDetails)';
+    return 'Customer(name: $name, age: $age, date: $date, imageUrl: $imageUrl, eventDates: $eventDates, eventDetails: $eventDetails)';
   }
 
   @override
@@ -204,6 +217,8 @@ class _$CustomerImpl implements _Customer {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.age, age) || other.age == age) &&
             (identical(other.date, date) || other.date == date) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
             const DeepCollectionEquality()
                 .equals(other._eventDates, _eventDates) &&
             const DeepCollectionEquality()
@@ -217,6 +232,7 @@ class _$CustomerImpl implements _Customer {
       name,
       age,
       date,
+      imageUrl,
       const DeepCollectionEquality().hash(_eventDates),
       const DeepCollectionEquality().hash(_eventDetails));
 
@@ -239,6 +255,7 @@ abstract class _Customer implements Customer {
       {required final String name,
       required final int age,
       required final DateTime date,
+      required final String imageUrl,
       final Map<DateTime, List>? eventDates,
       final Map<String, Customer>? eventDetails}) = _$CustomerImpl;
 
@@ -251,7 +268,9 @@ abstract class _Customer implements Customer {
   int get age;
   @override
   DateTime get date;
-  @override //required List<String> images,
+  @override
+  String get imageUrl;
+  @override
   Map<DateTime, List>? get eventDates;
   @override
   Map<String, Customer>? get eventDetails;
