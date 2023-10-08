@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "446994133291",
+    "project_id": "salon-web-e7012",
+    "storage_bucket": "salon-web-e7012.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446994133291:android:f2e84c9bd2316607ae956e",
+        "android_client_info": {
+          "package_name": "com.example.salon_config_web"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_eH8Cy6F5bfivtCsGnB7LElPByW_ek08"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
