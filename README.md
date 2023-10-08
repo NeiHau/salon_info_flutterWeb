@@ -1,4 +1,4 @@
-# salon_config_web
+# salon_info_flutterWeb
 
 A new Flutter project.
 
