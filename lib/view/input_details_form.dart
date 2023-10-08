@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../common/custom_snackbar.dart';
 import '../viewModel/customer_view_model.dart';
 import 'completed_input_page.dart';
 
@@ -64,15 +65,22 @@ class InputDetailsFormState extends ConsumerState<InputDetailsForm> {
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    await customerNotifier.saveCustomer();
+                    final result = await customerNotifier.saveCustomer();
+
+                    if (mounted && result) {
+                      // 正常にアップロードが完了した場合、SnackBarを表示
+                      CustomSnackbar.showTopSnackBar(context, '正常に追加されました');
+                    }
 
                     // 成功した後にSuccessPageに遷移
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SuccessPage(),
-                      ),
-                    );
+                    if (mounted) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SuccessPage(),
+                        ),
+                      );
+                    }
                   }
                 },
                 child: const Text("Submit"),

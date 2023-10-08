@@ -20,6 +20,7 @@ Customer _$CustomerFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Customer {
+  String get id => throw _privateConstructorUsedError; // 追加
   String get name => throw _privateConstructorUsedError;
   int get age => throw _privateConstructorUsedError;
   DateTime get date => throw _privateConstructorUsedError;
@@ -39,7 +40,8 @@ abstract class $CustomerCopyWith<$Res> {
       _$CustomerCopyWithImpl<$Res, Customer>;
   @useResult
   $Res call(
-      {String name,
+      {String id,
+      String name,
       int age,
       DateTime date,
       String imageUrl,
@@ -60,6 +62,7 @@ class _$CustomerCopyWithImpl<$Res, $Val extends Customer>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? name = null,
     Object? age = null,
     Object? date = null,
@@ -68,6 +71,10 @@ class _$CustomerCopyWithImpl<$Res, $Val extends Customer>
     Object? eventDetails = freezed,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -105,7 +112,8 @@ abstract class _$$CustomerImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String name,
+      {String id,
+      String name,
       int age,
       DateTime date,
       String imageUrl,
@@ -124,6 +132,7 @@ class __$$CustomerImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? name = null,
     Object? age = null,
     Object? date = null,
@@ -132,6 +141,10 @@ class __$$CustomerImplCopyWithImpl<$Res>
     Object? eventDetails = freezed,
   }) {
     return _then(_$CustomerImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -164,7 +177,8 @@ class __$$CustomerImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CustomerImpl implements _Customer {
   _$CustomerImpl(
-      {required this.name,
+      {required this.id,
+      required this.name,
       required this.age,
       required this.date,
       required this.imageUrl,
@@ -176,6 +190,9 @@ class _$CustomerImpl implements _Customer {
   factory _$CustomerImpl.fromJson(Map<String, dynamic> json) =>
       _$$CustomerImplFromJson(json);
 
+  @override
+  final String id;
+// 追加
   @override
   final String name;
   @override
@@ -206,7 +223,7 @@ class _$CustomerImpl implements _Customer {
 
   @override
   String toString() {
-    return 'Customer(name: $name, age: $age, date: $date, imageUrl: $imageUrl, eventDates: $eventDates, eventDetails: $eventDetails)';
+    return 'Customer(id: $id, name: $name, age: $age, date: $date, imageUrl: $imageUrl, eventDates: $eventDates, eventDetails: $eventDetails)';
   }
 
   @override
@@ -214,6 +231,7 @@ class _$CustomerImpl implements _Customer {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CustomerImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.age, age) || other.age == age) &&
             (identical(other.date, date) || other.date == date) &&
@@ -229,6 +247,7 @@ class _$CustomerImpl implements _Customer {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
       name,
       age,
       date,
@@ -252,7 +271,8 @@ class _$CustomerImpl implements _Customer {
 
 abstract class _Customer implements Customer {
   factory _Customer(
-      {required final String name,
+      {required final String id,
+      required final String name,
       required final int age,
       required final DateTime date,
       required final String imageUrl,
@@ -263,6 +283,8 @@ abstract class _Customer implements Customer {
       _$CustomerImpl.fromJson;
 
   @override
+  String get id;
+  @override // 追加
   String get name;
   @override
   int get age;

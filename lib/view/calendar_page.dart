@@ -7,6 +7,8 @@ import '../viewModel/customer_view_model.dart';
 import 'input_details_form.dart';
 
 class CalendarPage extends ConsumerStatefulWidget {
+  const CalendarPage({super.key});
+
   @override
   CalendarPageState createState() => CalendarPageState();
 }

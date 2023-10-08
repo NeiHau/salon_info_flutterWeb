@@ -6,6 +6,7 @@ part 'customer.g.dart';
 @freezed
 class Customer with _$Customer {
   factory Customer({
+    required String id, // 追加
     required String name,
     required int age,
     required DateTime date,

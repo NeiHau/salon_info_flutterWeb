@@ -16,7 +16,8 @@ final customerNotifierProvider =
 
 class CustomerNotifier extends StateNotifier<Customer> {
   CustomerNotifier()
-      : super(Customer(name: '', age: 0, date: DateTime.now(), imageUrl: ''));
+      : super(Customer(
+            name: '', age: 0, date: DateTime.now(), imageUrl: '', id: ''));
 
   final CollectionReference customers =
       FirebaseFirestore.instance.collection('customers');
@@ -72,7 +73,7 @@ class CustomerNotifier extends StateNotifier<Customer> {
     });
   }
 
-  Future<void> saveCustomer() async {
+  Future<bool> saveCustomer() async {
     try {
       await customers.add({
         'name': state.name,
@@ -81,8 +82,10 @@ class CustomerNotifier extends StateNotifier<Customer> {
         'imageUrl': state.imageUrl,
       });
       debugPrint("Successfully Customer Added");
+      return true;
     } catch (e) {
       debugPrint("Failed to add customer: $e");
+      return false;
     }
   }
 
@@ -118,6 +121,7 @@ class CustomerNotifier extends StateNotifier<Customer> {
           final DateTime date = (data['date'] as Timestamp).toDate();
           final DateTime dateKey = DateTime(date.year, date.month, date.day);
           final customer = Customer(
+            id: doc.id.toString(),
             name: data['name'],
             age: data['age'],
             date: date,
@@ -139,6 +143,19 @@ class CustomerNotifier extends StateNotifier<Customer> {
       state = state.copyWith(eventDates: newEventDates);
     } catch (e) {
       debugPrint("Failed to fetch dates: $e");
+    }
+  }
+
+  // 削除メソッド
+  Future<bool> deleteCustomer(String docId) async {
+    try {
+      await customers.doc(docId).delete();
+      // 削除に成功した場合の処理（例：stateの更新）
+      return true;
+    } catch (e) {
+      // 削除に失敗した場合のエラーハンドリング
+      debugPrint('Failed to delete customer: $e');
+      return false;
     }
   }
 }
