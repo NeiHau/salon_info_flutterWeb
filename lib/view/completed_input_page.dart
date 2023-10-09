@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'calendar_page.dart';
+import 'package:salon_config_web/view/home_page.dart';
 
 class SuccessPage extends StatelessWidget {
   const SuccessPage({super.key});
@@ -10,6 +9,7 @@ class SuccessPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Success'),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(
@@ -22,7 +22,7 @@ class SuccessPage extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CalendarPage(),
+                    builder: (context) => const HomePage(),
                   ),
                 );
               },

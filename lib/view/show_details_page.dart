@@ -85,13 +85,13 @@ class ShowDetailsPageState extends ConsumerState<ShowDetailsPage> {
                   );
                 }
                 return ListTile(
-                  title: Text('Name: ${customer.name}'),
+                  title: Text('名前: ${customer.name}'),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Age: ${customer.age}'),
-                      Text('Date: ${customer.date.toLocal()}'),
-                      Text('Age: ${customer.description}'),
+                      Text('年齢: ${customer.age}'),
+                      Text('追加日: ${customer.date.toLocal()}'),
+                      Text('詳細: ${customer.description}'),
                       Image.network(customer.imageUrl, height: 100, width: 100),
                     ],
                   ),

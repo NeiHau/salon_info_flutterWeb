@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../model/customer.dart';
 import '../viewModel/customer_view_model.dart';
@@ -20,7 +21,17 @@ class HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.refresh(customerNotifierProvider.notifier).fetchAllCustomers();
+    });
     customers = ref.read(customerNotifierProvider.notifier).fetchAllCustomers();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -69,12 +80,15 @@ class HomePageState extends ConsumerState<HomePage> {
                           title: const Text("絞り込み条件"),
                           content: Column(
                             children: [
-                              // ここで絞り込み条件の入力フォームを配置
-                              TextFormField(
-                                controller: nameController,
-                                decoration:
-                                    const InputDecoration(labelText: '名前'),
+                              SizedBox(
+                                width: 300,
+                                child: TextFormField(
+                                  controller: nameController,
+                                  decoration:
+                                      const InputDecoration(labelText: '名前'),
+                                ),
                               ),
+                              Gap(20),
                               ElevatedButton(
                                 onPressed: () async {
                                   selectedDate = await showDatePicker(
@@ -119,13 +133,14 @@ class HomePageState extends ConsumerState<HomePage> {
               ),
             ],
           ),
-          // FutureBuilderを含むListView
           Expanded(
             child: FutureBuilder<List<Customer>>(
               future: customers,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
 
                 if (snapshot.hasError) {
@@ -136,32 +151,41 @@ class HomePageState extends ConsumerState<HomePage> {
                   physics: const AlwaysScrollableScrollPhysics(),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-                    final customer = snapshot.data![index];
-                    return MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      onEnter: (_) {
-                        debugPrint("Mouse entered");
-                      },
-                      onHover: (_) {
-                        debugPrint("Mouse hovering");
-                      },
-                      onExit: (_) {
-                        debugPrint("Mouse exited");
-                      },
-                      child: ListTile(
-                        title: Text('Name: ${customer.name}'),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Age: ${customer.age}'),
-                            Text('Date: ${customer.date.toLocal()}'),
-                            Text('Age: ${customer.description}'),
-                            Image.network(
-                              customer.imageUrl,
-                              height: 100,
-                              width: 100,
+                    final sortedCustomers = snapshot.data!
+                      ..sort((a, b) => b.date.compareTo(a.date)); // 日付でソート
+                    final customer = sortedCustomers[index];
+
+                    return Center(
+                      child: SizedBox(
+                        width: 300,
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          onEnter: (_) {
+                            debugPrint("Mouse entered");
+                          },
+                          onHover: (_) {
+                            debugPrint("Mouse hovering");
+                          },
+                          onExit: (_) {
+                            debugPrint("Mouse exited");
+                          },
+                          child: ListTile(
+                            title: Text('名前: ${customer.name}'),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('年齢: ${customer.age}'),
+                                Text(
+                                    '追加日: ${customer.date.toLocal().year}年${customer.date.toLocal().month}月${customer.date.toLocal().day}日'),
+                                Text('詳細: ${customer.description}'),
+                                Image.network(
+                                  customer.imageUrl,
+                                  height: 100,
+                                  width: 100,
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     );

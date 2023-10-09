@@ -3,6 +3,7 @@ import 'dart:html' as html;
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod/riverpod.dart';
@@ -29,6 +30,8 @@ class CustomerNotifier extends StateNotifier<Customer> {
 
   final CollectionReference customers =
       FirebaseFirestore.instance.collection('customers');
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   // final ImagePicker _picker = ImagePicker();
 
@@ -102,6 +105,7 @@ class CustomerNotifier extends StateNotifier<Customer> {
     }
   }
 
+  // Firebase Storageに画像データを保存
   Future<void> saveImageToFirebaseStorage() async {
     try {
       final Reference storageRef = FirebaseStorage.instance
@@ -124,6 +128,7 @@ class CustomerNotifier extends StateNotifier<Customer> {
     }
   }
 
+  // 絞り込み検索
   Future<List<Customer>> fetchFilteredCustomers(String name) async {
     List<Customer> filteredCustomerList = [];
 
@@ -152,6 +157,7 @@ class CustomerNotifier extends StateNotifier<Customer> {
     return filteredCustomerList;
   }
 
+  // 一覧取得
   Future<List<Customer>> fetchAllCustomers() async {
     List<Customer> customerList = [];
 
@@ -178,6 +184,7 @@ class CustomerNotifier extends StateNotifier<Customer> {
     return customerList;
   }
 
+  // カレンダーの日付と同じデータを取得
   Future<void> fetchDates() async {
     try {
       final QuerySnapshot snapshot = await customers.get();
@@ -214,7 +221,7 @@ class CustomerNotifier extends StateNotifier<Customer> {
     }
   }
 
-  // 削除メソッド
+  // データ削除
   Future<bool> deleteCustomer(String docId) async {
     try {
       await customers.doc(docId).delete();
@@ -223,5 +230,17 @@ class CustomerNotifier extends StateNotifier<Customer> {
       debugPrint('Failed to delete customer: $e');
       return false;
     }
+  }
+
+  void setupNotification() {
+    _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      // 通知が来たときの処理
+    });
   }
 }

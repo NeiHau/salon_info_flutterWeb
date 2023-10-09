@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:salon_config_web/view/home_page.dart';
+import 'package:salon_config_web/view/calendar_page.dart';
 
 import '../common/custom_snackbar.dart';
 import '../viewModel/customer_view_model.dart';
@@ -31,7 +31,7 @@ class InputDetailsFormState extends ConsumerState<InputDetailsForm> {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => const HomePage(),
+                builder: (context) => const CalendarPage(),
               ),
               (route) => route.isFirst, // 最初の画面（この場合はCalendarPage）に達したら停止
             );

@@ -70,6 +70,36 @@ class CalendarPageState extends ConsumerState<CalendarPage> {
             calendarBuilders: CalendarBuilders(
               markerBuilder: (context, date, events) {
                 final dateKey = DateTime(date.year, date.month, date.day);
+                // bool hasReservation = true;
+
+                // return Row(
+                //   children: [
+                //     if (eventDates != null && eventDates.containsKey(dateKey))
+                //       Positioned(
+                //         bottom: 4,
+                //         child: Container(
+                //           width: 6,
+                //           height: 6,
+                //           decoration: const BoxDecoration(
+                //             shape: BoxShape.circle,
+                //             color: Colors.red,
+                //           ),
+                //         ),
+                //       ),
+                //     if (hasReservation)
+                //       const Positioned(
+                //         bottom: 4,
+                //         right: 4,
+                //         child: Text(
+                //           "予約",
+                //           style: TextStyle(
+                //             fontSize: 8,
+                //             color: Colors.blue,
+                //           ),
+                //         ),
+                //       ),
+                //   ],
+                // );
                 if (eventDates != null) {
                   if (eventDates.containsKey(dateKey)) {
                     return Positioned(

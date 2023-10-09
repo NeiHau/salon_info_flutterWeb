@@ -13,7 +13,7 @@ class Customer with _$Customer {
     required String description, // 詳細
     required String imageUrl, // 画像
     Map<DateTime, List>? eventDates, // データを追加した日付を管理
-    Map<String, Customer>? eventDetails, // required propertiesをまとめたもの
+    Map<String, Customer>? eventDetails, // propertiesをまとめたもの
   }) = _Customer;
 
   factory Customer.fromJson(Map<String, dynamic> json) =>

@@ -20,13 +20,14 @@ Customer _$CustomerFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Customer {
-  String get id => throw _privateConstructorUsedError; // 追加
-  String get name => throw _privateConstructorUsedError;
-  int get age => throw _privateConstructorUsedError;
-  DateTime get date => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
-  String get imageUrl => throw _privateConstructorUsedError;
-  Map<DateTime, List>? get eventDates => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError; // doc id
+  String get name => throw _privateConstructorUsedError; // 顧客名
+  int get age => throw _privateConstructorUsedError; // 年齢
+  DateTime get date => throw _privateConstructorUsedError; // 日付
+  String get description => throw _privateConstructorUsedError; // 詳細
+  String get imageUrl => throw _privateConstructorUsedError; // 画像
+  Map<DateTime, List>? get eventDates =>
+      throw _privateConstructorUsedError; // データを追加した日付を管理
   Map<String, Customer>? get eventDetails => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -206,18 +207,24 @@ class _$CustomerImpl implements _Customer {
 
   @override
   final String id;
-// 追加
+// doc id
   @override
   final String name;
+// 顧客名
   @override
   final int age;
+// 年齢
   @override
   final DateTime date;
+// 日付
   @override
   final String description;
+// 詳細
   @override
   final String imageUrl;
+// 画像
   final Map<DateTime, List>? _eventDates;
+// 画像
   @override
   Map<DateTime, List>? get eventDates {
     final value = _eventDates;
@@ -227,7 +234,9 @@ class _$CustomerImpl implements _Customer {
     return EqualUnmodifiableMapView(value);
   }
 
+// データを追加した日付を管理
   final Map<String, Customer>? _eventDetails;
+// データを追加した日付を管理
   @override
   Map<String, Customer>? get eventDetails {
     final value = _eventDetails;
@@ -304,19 +313,19 @@ abstract class _Customer implements Customer {
 
   @override
   String get id;
-  @override // 追加
+  @override // doc id
   String get name;
-  @override
+  @override // 顧客名
   int get age;
-  @override
+  @override // 年齢
   DateTime get date;
-  @override
+  @override // 日付
   String get description;
-  @override
+  @override // 詳細
   String get imageUrl;
-  @override
+  @override // 画像
   Map<DateTime, List>? get eventDates;
-  @override
+  @override // データを追加した日付を管理
   Map<String, Customer>? get eventDetails;
   @override
   @JsonKey(ignore: true)
