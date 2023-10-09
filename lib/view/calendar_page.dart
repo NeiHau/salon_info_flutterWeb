@@ -30,11 +30,11 @@ class CalendarPageState extends ConsumerState<CalendarPage> {
   Widget build(BuildContext context) {
     final customer = ref.watch(customerNotifierProvider);
     final eventDates = customer.eventDates;
-    final eventDetails = customer;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Calendar'),
+        automaticallyImplyLeading: true, // この行を追加
       ),
       body: Column(
         children: [
@@ -99,16 +99,26 @@ class CalendarPageState extends ConsumerState<CalendarPage> {
           const SizedBox(
             height: 200,
           ),
-          FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => InputDetailsForm(),
-                ),
-              );
-            },
-            child: const Icon(Icons.plus_one),
+          SizedBox(
+            width: 200,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const InputDetailsForm(),
+                  ),
+                );
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("追加"),
+                  SizedBox(width: 8),
+                  Icon(Icons.add),
+                ],
+              ),
+            ),
           ),
         ],
       ),

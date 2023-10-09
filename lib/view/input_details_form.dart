@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
+import 'package:salon_config_web/view/home_page.dart';
 
 import '../common/custom_snackbar.dart';
 import '../viewModel/customer_view_model.dart';
@@ -23,6 +25,18 @@ class InputDetailsFormState extends ConsumerState<InputDetailsForm> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Customer Form"),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomePage(),
+              ),
+              (route) => route.isFirst, // 最初の画面（この場合はCalendarPage）に達したら停止
+            );
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -35,12 +49,14 @@ class InputDetailsFormState extends ConsumerState<InputDetailsForm> {
                 onChanged: (val) => customerNotifier.setName(val),
                 validator: (val) => val!.isEmpty ? 'Enter a name' : null,
               ),
+              const Gap(20),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Age'),
                 keyboardType: TextInputType.number,
                 onChanged: (val) => customerNotifier.setAge(int.parse(val)),
                 validator: (val) => val!.isEmpty ? 'Enter age' : null,
               ),
+              const Gap(20),
               ElevatedButton(
                 onPressed: () async {
                   await customerNotifier.pickDate(context);
@@ -48,20 +64,23 @@ class InputDetailsFormState extends ConsumerState<InputDetailsForm> {
                 child: const Text("Pick Date"),
               ),
               Text("Selected date: ${customer.date.toLocal()}"),
+              const Gap(20),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Description'),
+                onChanged: (val) => customerNotifier.setDescription(val),
+                validator: (val) => val!.isEmpty ? 'Enter a description' : null,
+              ),
+              const Gap(20),
               ElevatedButton(
                 onPressed: () {
                   customerNotifier.getImage(); // 画像を選択
+                  customerNotifier.saveImageToFirebaseStorage(); // 画像をアップロード
                 },
                 child: const Text("Pick Image"),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  customerNotifier.saveImageToFirebaseStorage(); // 画像をアップロード
-                },
-                child: const Text("Upload Image"),
-              ),
               if (customer.imageUrl.isNotEmpty)
                 Image.network(customer.imageUrl), // imageUrlを表示
+              const Gap(20),
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {

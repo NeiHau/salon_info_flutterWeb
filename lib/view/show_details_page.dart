@@ -91,6 +91,7 @@ class ShowDetailsPageState extends ConsumerState<ShowDetailsPage> {
                     children: [
                       Text('Age: ${customer.age}'),
                       Text('Date: ${customer.date.toLocal()}'),
+                      Text('Age: ${customer.description}'),
                       Image.network(customer.imageUrl, height: 100, width: 100),
                     ],
                   ),
@@ -102,14 +103,12 @@ class ShowDetailsPageState extends ConsumerState<ShowDetailsPage> {
                           .deleteCustomer(customer.id);
 
                       if (result) {
-                        // 削除が成功した場合にデータを再取得
+                        // 削除が成功した場合にデータを再取得（再描画）
                         ref
                             .refresh(customerNotifierProvider.notifier)
                             .fetchDates();
                       }
-
                       if (mounted) {
-                        // 正常にアップロードが完了した場合、SnackBarを表示
                         CustomSnackbar.showTopSnackBar(context, 'データを削除しました。');
                       }
                     },

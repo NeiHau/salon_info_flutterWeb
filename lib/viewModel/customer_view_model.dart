@@ -16,8 +16,16 @@ final customerNotifierProvider =
 
 class CustomerNotifier extends StateNotifier<Customer> {
   CustomerNotifier()
-      : super(Customer(
-            name: '', age: 0, date: DateTime.now(), imageUrl: '', id: ''));
+      : super(
+          Customer(
+            name: '',
+            age: 0,
+            date: DateTime.now(),
+            description: '',
+            imageUrl: '',
+            id: '',
+          ),
+        );
 
   final CollectionReference customers =
       FirebaseFirestore.instance.collection('customers');
@@ -38,6 +46,10 @@ class CustomerNotifier extends StateNotifier<Customer> {
 
   void setDate(DateTime date) {
     state = state.copyWith(date: date);
+  }
+
+  void setDescription(String description) {
+    state = state.copyWith(description: description);
   }
 
   void setImageUrl(String url) {
@@ -79,6 +91,7 @@ class CustomerNotifier extends StateNotifier<Customer> {
         'name': state.name,
         'age': state.age,
         'date': state.date,
+        'description': state.description,
         'imageUrl': state.imageUrl,
       });
       debugPrint("Successfully Customer Added");
@@ -111,6 +124,60 @@ class CustomerNotifier extends StateNotifier<Customer> {
     }
   }
 
+  Future<List<Customer>> fetchFilteredCustomers(String name) async {
+    List<Customer> filteredCustomerList = [];
+
+    try {
+      final QuerySnapshot snapshot = await customers.get();
+      for (var doc in snapshot.docs) {
+        final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        final DateTime date = (data['date'] as Timestamp).toDate();
+        final customer = Customer(
+          id: doc.id,
+          name: data['name'],
+          age: data['age'],
+          date: date,
+          description: data['description'].toString(),
+          imageUrl: data['imageUrl'].toString(),
+        );
+
+        if (name.isEmpty || customer.name.contains(name)) {
+          filteredCustomerList.add(customer);
+        }
+      }
+    } catch (e) {
+      debugPrint("Failed to fetch all customers: $e");
+    }
+
+    return filteredCustomerList;
+  }
+
+  Future<List<Customer>> fetchAllCustomers() async {
+    List<Customer> customerList = [];
+
+    try {
+      final QuerySnapshot snapshot = await customers.get();
+      for (var doc in snapshot.docs) {
+        final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        final DateTime date = (data['date'] as Timestamp).toDate();
+        final customer = Customer(
+          id: doc.id,
+          name: data['name'],
+          age: data['age'],
+          date: date,
+          description: data['description'].toString(),
+          imageUrl: data['imageUrl'].toString(),
+        );
+
+        customerList.add(customer);
+      }
+    } catch (e) {
+      debugPrint("Failed to fetch all customers: $e");
+    }
+
+    return customerList;
+  }
+
   Future<void> fetchDates() async {
     try {
       final QuerySnapshot snapshot = await customers.get();
@@ -125,6 +192,7 @@ class CustomerNotifier extends StateNotifier<Customer> {
             name: data['name'],
             age: data['age'],
             date: date,
+            description: data['description'].toString(),
             imageUrl: data['imageUrl'].toString(),
           );
 
@@ -150,10 +218,8 @@ class CustomerNotifier extends StateNotifier<Customer> {
   Future<bool> deleteCustomer(String docId) async {
     try {
       await customers.doc(docId).delete();
-      // 削除に成功した場合の処理（例：stateの更新）
       return true;
     } catch (e) {
-      // 削除に失敗した場合のエラーハンドリング
       debugPrint('Failed to delete customer: $e');
       return false;
     }
