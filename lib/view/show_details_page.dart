@@ -84,6 +84,7 @@ class ShowDetailsPageState extends ConsumerState<ShowDetailsPage> {
                     title: Text('Unknown'),
                   );
                 }
+
                 return ListTile(
                   title: Text('名前: ${customer.name}'),
                   subtitle: Column(
@@ -93,6 +94,8 @@ class ShowDetailsPageState extends ConsumerState<ShowDetailsPage> {
                       Text('追加日: ${customer.date.toLocal()}'),
                       Text('詳細: ${customer.description}'),
                       Image.network(customer.imageUrl, height: 100, width: 100),
+                      // Image.memory(imageData,
+                      //     height: 100, width: 100), // この行を変更
                     ],
                   ),
                   trailing: IconButton(

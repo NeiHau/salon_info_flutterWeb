@@ -33,11 +33,9 @@ class CustomerNotifier extends StateNotifier<Customer> {
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
-  // final ImagePicker _picker = ImagePicker();
-
   Map<String, Customer> eventDetails = {}; // IDとCustomerオブジェクトのマッピング
 
-  String? fileName; // 追加: ファイル名を保持する変数
+  String? fileName; // ファイル名を保持
 
   void setName(String name) {
     state = state.copyWith(name: name);
@@ -88,6 +86,25 @@ class CustomerNotifier extends StateNotifier<Customer> {
     });
   }
 
+  // 画像のURLを取得
+  // Future<String?> getDownloadUrl(String filePath) async {
+  //   try {
+  //     // Firebase Storageのインスタンスを取得
+  //     final FirebaseStorage storage = FirebaseStorage.instance;
+  //
+  //     // 特定のファイルの参照を取得
+  //     final Reference ref = storage.ref(filePath);
+  //
+  //     // ダウンロードURLを取得
+  //     final String downloadUrl = await ref.getDownloadURL();
+  //
+  //     return downloadUrl;
+  //   } catch (e) {
+  //     logger.log(Level.trace, e);
+  //     return null;
+  //   }
+  // }
+
   Future<bool> saveCustomer() async {
     try {
       await customers.add({
@@ -122,6 +139,7 @@ class CustomerNotifier extends StateNotifier<Customer> {
       await uploadTask.whenComplete(() async {
         final String downloadUrl = await storageRef.getDownloadURL();
         debugPrint("Image uploaded, download URL: $downloadUrl");
+        setImageUrl(downloadUrl); // ダウンロードURLを設定
       });
     } catch (e) {
       debugPrint("Failed to upload image: $e");

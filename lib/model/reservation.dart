@@ -5,9 +5,11 @@ part 'reservation.g.dart';
 
 @freezed
 class Reservation with _$Reservation {
-  factory Reservation({
+  const factory Reservation({
     required String customerId,
     required DateTime reservationDate,
+    required String customerName,
+    Map<DateTime, List>? reservationList,
   }) = _Reservation;
 
   factory Reservation.fromJson(Map<String, dynamic> json) =>

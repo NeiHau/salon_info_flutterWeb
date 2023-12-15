@@ -22,6 +22,9 @@ Reservation _$ReservationFromJson(Map<String, dynamic> json) {
 mixin _$Reservation {
   String get customerId => throw _privateConstructorUsedError;
   DateTime get reservationDate => throw _privateConstructorUsedError;
+  String get customerName => throw _privateConstructorUsedError;
+  Map<DateTime, List>? get reservationList =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +38,11 @@ abstract class $ReservationCopyWith<$Res> {
           Reservation value, $Res Function(Reservation) then) =
       _$ReservationCopyWithImpl<$Res, Reservation>;
   @useResult
-  $Res call({String customerId, DateTime reservationDate});
+  $Res call(
+      {String customerId,
+      DateTime reservationDate,
+      String customerName,
+      Map<DateTime, List>? reservationList});
 }
 
 /// @nodoc
@@ -53,6 +60,8 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
   $Res call({
     Object? customerId = null,
     Object? reservationDate = null,
+    Object? customerName = null,
+    Object? reservationList = freezed,
   }) {
     return _then(_value.copyWith(
       customerId: null == customerId
@@ -63,6 +72,14 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
           ? _value.reservationDate
           : reservationDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      customerName: null == customerName
+          ? _value.customerName
+          : customerName // ignore: cast_nullable_to_non_nullable
+              as String,
+      reservationList: freezed == reservationList
+          ? _value.reservationList
+          : reservationList // ignore: cast_nullable_to_non_nullable
+              as Map<DateTime, List>?,
     ) as $Val);
   }
 }
@@ -75,7 +92,11 @@ abstract class _$$ReservationImplCopyWith<$Res>
       __$$ReservationImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String customerId, DateTime reservationDate});
+  $Res call(
+      {String customerId,
+      DateTime reservationDate,
+      String customerName,
+      Map<DateTime, List>? reservationList});
 }
 
 /// @nodoc
@@ -91,6 +112,8 @@ class __$$ReservationImplCopyWithImpl<$Res>
   $Res call({
     Object? customerId = null,
     Object? reservationDate = null,
+    Object? customerName = null,
+    Object? reservationList = freezed,
   }) {
     return _then(_$ReservationImpl(
       customerId: null == customerId
@@ -101,6 +124,14 @@ class __$$ReservationImplCopyWithImpl<$Res>
           ? _value.reservationDate
           : reservationDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      customerName: null == customerName
+          ? _value.customerName
+          : customerName // ignore: cast_nullable_to_non_nullable
+              as String,
+      reservationList: freezed == reservationList
+          ? _value._reservationList
+          : reservationList // ignore: cast_nullable_to_non_nullable
+              as Map<DateTime, List>?,
     ));
   }
 }
@@ -108,7 +139,12 @@ class __$$ReservationImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ReservationImpl implements _Reservation {
-  _$ReservationImpl({required this.customerId, required this.reservationDate});
+  const _$ReservationImpl(
+      {required this.customerId,
+      required this.reservationDate,
+      required this.customerName,
+      final Map<DateTime, List>? reservationList})
+      : _reservationList = reservationList;
 
   factory _$ReservationImpl.fromJson(Map<String, dynamic> json) =>
       _$$ReservationImplFromJson(json);
@@ -117,10 +153,21 @@ class _$ReservationImpl implements _Reservation {
   final String customerId;
   @override
   final DateTime reservationDate;
+  @override
+  final String customerName;
+  final Map<DateTime, List>? _reservationList;
+  @override
+  Map<DateTime, List>? get reservationList {
+    final value = _reservationList;
+    if (value == null) return null;
+    if (_reservationList is EqualUnmodifiableMapView) return _reservationList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
 
   @override
   String toString() {
-    return 'Reservation(customerId: $customerId, reservationDate: $reservationDate)';
+    return 'Reservation(customerId: $customerId, reservationDate: $reservationDate, customerName: $customerName, reservationList: $reservationList)';
   }
 
   @override
@@ -131,12 +178,17 @@ class _$ReservationImpl implements _Reservation {
             (identical(other.customerId, customerId) ||
                 other.customerId == customerId) &&
             (identical(other.reservationDate, reservationDate) ||
-                other.reservationDate == reservationDate));
+                other.reservationDate == reservationDate) &&
+            (identical(other.customerName, customerName) ||
+                other.customerName == customerName) &&
+            const DeepCollectionEquality()
+                .equals(other._reservationList, _reservationList));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, customerId, reservationDate);
+  int get hashCode => Object.hash(runtimeType, customerId, reservationDate,
+      customerName, const DeepCollectionEquality().hash(_reservationList));
 
   @JsonKey(ignore: true)
   @override
@@ -153,9 +205,11 @@ class _$ReservationImpl implements _Reservation {
 }
 
 abstract class _Reservation implements Reservation {
-  factory _Reservation(
+  const factory _Reservation(
       {required final String customerId,
-      required final DateTime reservationDate}) = _$ReservationImpl;
+      required final DateTime reservationDate,
+      required final String customerName,
+      final Map<DateTime, List>? reservationList}) = _$ReservationImpl;
 
   factory _Reservation.fromJson(Map<String, dynamic> json) =
       _$ReservationImpl.fromJson;
@@ -164,6 +218,10 @@ abstract class _Reservation implements Reservation {
   String get customerId;
   @override
   DateTime get reservationDate;
+  @override
+  String get customerName;
+  @override
+  Map<DateTime, List>? get reservationList;
   @override
   @JsonKey(ignore: true)
   _$$ReservationImplCopyWith<_$ReservationImpl> get copyWith =>
