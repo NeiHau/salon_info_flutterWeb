@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:logger/logger.dart';
 import 'package:salon_config_web/view/reservation_page.dart';
 import 'package:salon_config_web/view/show_details_page.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../main.dart';
+import '../model/reservation.dart';
 import '../viewModel/customer_view_model.dart';
 import '../viewModel/reservation_view_model.dart';
 import 'input_details_form.dart';
@@ -32,7 +35,7 @@ class CalendarPageState extends ConsumerState<CalendarPage> {
       await ref.read(customerNotifierProvider.notifier).fetchDates();
       await ref.read(reservationNotifierProvider.notifier).fetchReservations();
     });
-    _startTimer();
+    // _startTimer();
   }
 
   // 2秒間隔で予約情報を取得
@@ -50,7 +53,7 @@ class CalendarPageState extends ConsumerState<CalendarPage> {
 
   @override
   void dispose() {
-    _timer?.cancel();
+    // _timer?.cancel();
     super.dispose();
   }
 
@@ -113,39 +116,61 @@ class CalendarPageState extends ConsumerState<CalendarPage> {
                   final dateKey = DateTime(date.year, date.month, date.day);
                   bool hasEvent =
                       eventDates != null && eventDates.containsKey(dateKey);
-                  bool hasReservation = reservationDates != null &&
-                      reservationDates.containsKey(dateKey);
 
-                  if (hasEvent || hasReservation) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (hasEvent)
-                          Container(
-                            margin: const EdgeInsets.only(right: 4.0),
-                            width: 6,
-                            height: 6,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.red,
-                            ),
-                          ),
-                        if (hasReservation)
-                          Container(
-                            padding: const EdgeInsets.all(4.0),
-                            color: Colors.blue,
-                            child: const Text(
-                              "予",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 8,
-                              ),
-                            ),
-                          ),
-                      ],
-                    );
-                  }
-                  return const SizedBox.shrink();
+                  // 予約情報のマーカーをストリームで描画
+                  return StreamBuilder<Map<DateTime, List<Reservation>>>(
+                    stream: ref
+                        .watch(reservationNotifierProvider.notifier)
+                        .fetchReservationsStream(),
+                    builder: (context, snapshot) {
+                      // データロード中の表示
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const SizedBox.shrink();
+                      }
+
+                      // エラーが発生した場合の表示
+                      if (snapshot.hasError) {
+                        logger.log(Level.trace, snapshot.error);
+                      }
+
+                      if (snapshot.hasData) {
+                        final reservationDates = snapshot.data!;
+                        bool hasReservation =
+                            reservationDates.containsKey(dateKey);
+
+                        if (hasEvent || hasReservation) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (hasEvent)
+                                Container(
+                                  margin: const EdgeInsets.only(right: 4.0),
+                                  width: 6,
+                                  height: 6,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              if (hasReservation)
+                                Container(
+                                  padding: const EdgeInsets.all(4.0),
+                                  color: Colors.blue,
+                                  child: const Text(
+                                    "予",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 8,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          );
+                        }
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  );
                 },
               ),
               onFormatChanged: (format) {

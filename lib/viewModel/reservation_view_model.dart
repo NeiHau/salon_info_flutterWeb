@@ -40,28 +40,28 @@ class ReservationNotifier extends StateNotifier<Reservation> {
   // 予約情報のマッピング
   Map<DateTime, List<Reservation>> reservationDates = {};
 
-  // Stream<Map<DateTime, List<Reservation>>> fetchReservationsStream() {
-  //   return reservations.snapshots().map((snapshot) {
-  //     Map<DateTime, List<Reservation>> tempReservations = {};
-  //
-  //     for (var doc in snapshot.docs) {
-  //       Reservation reservation =
-  //           Reservation.fromJson(doc.data() as Map<String, dynamic>);
-  //       DateTime dateKey = DateTime(
-  //         reservation.reservationDate.year,
-  //         reservation.reservationDate.month,
-  //         reservation.reservationDate.day,
-  //       );
-  //
-  //       if (!tempReservations.containsKey(dateKey)) {
-  //         tempReservations[dateKey] = [];
-  //       }
-  //       tempReservations[dateKey]!.add(reservation);
-  //     }
-  //
-  //     return tempReservations;
-  //   });
-  // }
+  Stream<Map<DateTime, List<Reservation>>> fetchReservationsStream() {
+    return reservations.snapshots().map((snapshot) {
+      Map<DateTime, List<Reservation>> tempReservations = {};
+
+      for (var doc in snapshot.docs) {
+        Reservation reservation =
+            Reservation.fromJson(doc.data() as Map<String, dynamic>);
+        DateTime dateKey = DateTime(
+          reservation.reservationDate.year,
+          reservation.reservationDate.month,
+          reservation.reservationDate.day,
+        );
+
+        if (!tempReservations.containsKey(dateKey)) {
+          tempReservations[dateKey] = [];
+        }
+        tempReservations[dateKey]!.add(reservation);
+      }
+
+      return tempReservations;
+    });
+  }
 
   // 予約情報取得メソッド
   Future<void> fetchReservations() async {
